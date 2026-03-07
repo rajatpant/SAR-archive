@@ -1,11 +1,12 @@
 {
-  "description": "Full 6-stage ML pipeline configuration",
+  "description": "Full 6-stage ML pipeline configuration for Nizhnesvirsky region",
   "dry_run": false,
   "auto_apply_feedback": false,
   
   "global": {
     "project_root": "/Users/rv/Desktop/SAR/sar",
-    "output_base": "outputs"
+    "output_base": "outputs",
+    "timestamp": "20260307"
   },
   
   "stage1_download": {
@@ -18,20 +19,24 @@
   },
   
   "stage2_enrichment": {
-    "input_dir": "outputs/20260307",
-    "output_dir": "model/inputs/enriched",
-    "sensor": "sentinel-1",
+    "input_dir": "metadata_by_item",
+    "output_dir": "metadata_by_item",
     "s3_prefix": "s3://eodata/Sentinel-1/",
-    "skip_enriched": true,
-    "try_s3cmd": true,
-    "regenerate": true
+    "try_s3_discovery": true,
+    "stac_token": null,
+    "limit": 0
   },
   
   "stage3_goal_enrichment": {
-    "input_dir": "model/inputs/enriched",
+    "input_dir": "metadata_by_item",
     "output_dir": "model/inputs/goal_specific",
     "goal": "geographical",
-    "parameter_selection": "model/parameterSelection-UnSupervised-Geographical.json"
+    "parameter_selection": "model/parameterSelection-UnSupervised-Geographical.json",
+    "suitability_thresholds": {
+      "cloud_cover_max": 20,
+      "min_orbit_count": 1,
+      "required_polarizations": ["VV", "VH"]
+    }
   },
   
   "stage4_data_prep": {
@@ -40,23 +45,35 @@
     "chip_size": 512,
     "batch_size": 4,
     "random_seed": 42,
-    "train_val_test_split": [0.7, 0.2, 0.1]
+    "train_val_test_split": [0.7, 0.2, 0.1],
+    "max_chips_per_scene": 10,
+    "nan_tolerance": 0.2
   },
   
   "stage5_training": {
-    "data_loader_manifest": "outputs/20260307/stage4_data_prep_manifest.json",
-    "model_config": "model/parameterSelection-UnSupervised-Geographical.json",
-    "training_config": "configs/unsupervised_training_nizhnesvirsky.json",
-    "checkpoint_dir": "outputs/20260307/checkpoints",
-    "epochs": 10,
-    "learning_rate": 0.001,
-    "random_seed": 42
+    "input_dir": "outputs/20260307",
+    "output_dir": "outputs/20260307/models",
+    "model_type": "unsupervised",
+    "goal": "geographical",
+    "architecture": "vit-mae",
+    "hyperparameters": {
+      "epochs": 10,
+      "learning_rate": 0.0001,
+      "batch_size": 4,
+      "optimizer": "AdamW",
+      "loss_function": "MSE"
+    },
+    "random_seed": 42,
+    "checkpoint_every_n_epochs": 5,
+    "parameter_selection": "model/parameterSelection-UnSupervised-Geographical.json"
   },
   
   "stage6_feedback": {
-    "model_report": "outputs/20260307/model_run_report.json",
+    "model_report": "outputs/20260307/models/training_report.json",
     "validation_metrics": "outputs/20260307/validation_metrics.json",
     "output_dir": "outputs/20260307",
-    "recommendation_threshold": 0.7
+    "current_configs_dir": "configs",
+    "recommendation_threshold": 0.7,
+    "rejection_rate_threshold": 0.8
   }
 }
