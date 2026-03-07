@@ -1,0 +1,62 @@
+{
+  "description": "Full 6-stage ML pipeline configuration",
+  "dry_run": false,
+  "auto_apply_feedback": false,
+  
+  "global": {
+    "project_root": "/Users/rv/Desktop/SAR/sar",
+    "output_base": "outputs"
+  },
+  
+  "stage1_download": {
+    "bbox": [28.0, 60.0, 32.0, 62.0],
+    "date_range": ["2022-11-01", "2023-12-31"],
+    "sensor": "sentinel-1",
+    "output_dir": "outputs/20260307",
+    "max_items": 10,
+    "skip_existing": true
+  },
+  
+  "stage2_enrichment": {
+    "input_dir": "outputs/20260307",
+    "output_dir": "model/inputs/enriched",
+    "sensor": "sentinel-1",
+    "s3_prefix": "s3://eodata/Sentinel-1/",
+    "skip_enriched": true,
+    "try_s3cmd": true,
+    "regenerate": true
+  },
+  
+  "stage3_goal_enrichment": {
+    "input_dir": "model/inputs/enriched",
+    "output_dir": "model/inputs/goal_specific",
+    "goal": "geographical",
+    "parameter_selection": "model/parameterSelection-UnSupervised-Geographical.json"
+  },
+  
+  "stage4_data_prep": {
+    "input_dir": "model/inputs/goal_specific",
+    "output_dir": "outputs/20260307",
+    "chip_size": 512,
+    "batch_size": 4,
+    "random_seed": 42,
+    "train_val_test_split": [0.7, 0.2, 0.1]
+  },
+  
+  "stage5_training": {
+    "data_loader_manifest": "outputs/20260307/stage4_data_prep_manifest.json",
+    "model_config": "model/parameterSelection-UnSupervised-Geographical.json",
+    "training_config": "configs/unsupervised_training_nizhnesvirsky.json",
+    "checkpoint_dir": "outputs/20260307/checkpoints",
+    "epochs": 10,
+    "learning_rate": 0.001,
+    "random_seed": 42
+  },
+  
+  "stage6_feedback": {
+    "model_report": "outputs/20260307/model_run_report.json",
+    "validation_metrics": "outputs/20260307/validation_metrics.json",
+    "output_dir": "outputs/20260307",
+    "recommendation_threshold": 0.7
+  }
+}
