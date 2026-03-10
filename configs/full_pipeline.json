@@ -2,7 +2,16 @@
   "description": "Full 6-stage ML pipeline configuration for Nizhnesvirsky region",
   "dry_run": false,
   "auto_apply_feedback": false,
-  
+
+  "stage0_env_check": {
+    "output_dir": "outputs/20260307",
+    "min_free_disk_gb": 10.0,
+    "min_python": [3, 9],
+    "required_packages": ["torch", "rasterio", "boto3", "numpy", "pandas"],
+    "s3_endpoint": "https://s3.waw3-1.cloudferro.com",
+    "sentinelhub_config": ""
+  },
+
   "global": {
     "project_root": "/Users/rv/Desktop/SAR/sar",
     "output_base": "outputs",
@@ -30,13 +39,11 @@
   "stage3_goal_enrichment": {
     "input_dir": "metadata_by_item",
     "output_dir": "model/inputs/goal_specific",
-    "goal": "geographical",
+    "goal": "all",
+    "catalog_path": "model/ml_tuned_catalog.json",
     "parameter_selection": "model/parameterSelection-UnSupervised-Geographical.json",
-    "suitability_thresholds": {
-      "cloud_cover_max": 20,
-      "min_orbit_count": 1,
-      "required_polarizations": ["VV", "VH"]
-    }
+    "train_type": "unsupervised",
+    "suitability_thresholds": {}
   },
   
   "stage4_data_prep": {
