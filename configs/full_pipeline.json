@@ -8,8 +8,8 @@
     "min_free_disk_gb": 10.0,
     "min_python": [3, 9],
     "required_packages": ["torch", "rasterio", "boto3", "numpy", "pandas"],
-    "s3_endpoint": "https://s3.waw3-1.cloudferro.com",
-    "sentinelhub_config": ""
+    "s3_endpoint": "https://eodata.dataspace.copernicus.eu",
+    "sentinelhub_config": "configs/sentinelhub_credentials.json"
   },
 
   "global": {
@@ -19,12 +19,14 @@
   },
   
   "stage1_download": {
+    "aoi_geojson": "Nizhnesvirsky_lower_bay.geojson",
     "bbox": [28.0, 60.0, 32.0, 62.0],
-    "date_range": ["2022-11-01", "2023-12-31"],
+    "date_range": ["2022-01-01", "2023-12-31"],
     "sensor": "sentinel-1",
     "output_dir": "outputs/20260307",
     "max_items": 10,
-    "skip_existing": true
+    "skip_existing": true,
+    "sentinelhub_config": "configs/sentinelhub_credentials.json"
   },
   
   "stage2_enrichment": {
