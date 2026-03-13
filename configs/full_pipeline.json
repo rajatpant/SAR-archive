@@ -35,7 +35,8 @@
     "s3_prefix": "s3://eodata/Sentinel-1/",
     "try_s3_discovery": true,
     "stac_token": null,
-    "limit": 0
+    "limit": 0,
+    "sentinelhub_config": "configs/sentinelhub_credentials.json"
   },
   
   "stage3_goal_enrichment": {
