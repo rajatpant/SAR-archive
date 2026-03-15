@@ -3,8 +3,15 @@
   "dry_run": false,
   "auto_apply_feedback": false,
 
+  "_legacy_fallback": false,
+  "_path_policy": "ALL input/output paths are resolved from run_manifest.json via region_key. No hardcoded paths in this file. Agents fail loudly if a manifest path is missing.",
+
+  "region_key": "nizhnesvirsky-lower-bay",
+  "run_type": "dry-run",
+  "stages": [0, 1, 2, 3, 4, 5, 6],
+
   "stage0_env_check": {
-    "output_dir": "outputs/20260307",
+    "_paths_from": "manifest.stages.stage0.output",
     "min_free_disk_gb": 10.0,
     "min_python": [3, 9],
     "required_packages": ["torch", "rasterio", "boto3", "numpy", "pandas"],
@@ -12,46 +19,35 @@
     "sentinelhub_config": "configs/sentinelhub_credentials.json"
   },
 
-  "global": {
-    "project_root": "/Users/rv/Desktop/SAR/sar",
-    "output_base": "outputs",
-    "timestamp": "20260307"
-  },
-  
   "stage1_download": {
-    "aoi_geojson": "Nizhnesvirsky_lower_bay.geojson",
-    "bbox": [28.0, 60.0, 32.0, 62.0],
-    "date_range": ["2022-01-01", "2023-12-31"],
+    "_paths_from": "manifest.static.bbox_geojson (aoi_geojson), manifest.stages.stage1.output (output_dir), regions.json.dev_date_range (date_range), regions.json.s3_query_bbox (bbox)",
     "sensor": "sentinel-1",
-    "output_dir": "outputs/20260307",
-    "max_items": 10,
+    "max_items": 1,
     "skip_existing": true,
     "sentinelhub_config": "configs/sentinelhub_credentials.json"
   },
-  
+
   "stage2_enrichment": {
-    "input_dir": "metadata_by_item",
-    "output_dir": "metadata_by_item",
+    "_paths_from": "manifest.stages.stage1.output → input_dir, manifest.static.s1_enriched_dir → output_dir",
     "s3_prefix": "s3://eodata/Sentinel-1/",
     "try_s3_discovery": true,
     "stac_token": null,
     "limit": 0,
     "sentinelhub_config": "configs/sentinelhub_credentials.json"
   },
-  
+
   "stage3_goal_enrichment": {
-    "input_dir": "metadata_by_item",
-    "output_dir": "model/inputs/goal_specific",
+    "_paths_from": "manifest.static.s1_enriched_dir → input_dir, manifest.stages.stage3.output → output_dir",
     "goal": "all",
-    "catalog_path": "model/ml_tuned_catalog.json",
-    "parameter_selection": "model/parameterSelection-UnSupervised-Geographical.json",
+    "catalog_path": "configs/model-params/ml_tuned_catalog.json",
+    "parameter_selection": "configs/model-params/parameterSelection-UnSupervised-Geographical.json",
     "train_type": "unsupervised",
     "suitability_thresholds": {}
   },
-  
+
   "stage4_data_prep": {
-    "input_dir": "model/inputs/goal_specific",
-    "output_dir": "outputs/20260307",
+    "_paths_from": "manifest.stages.stage3.output → input_dir, manifest.stages.stage4.output → output_dir",
+    "catalog_path": "configs/model-params/ml_tuned_catalog.json",
     "chip_size": 512,
     "batch_size": 4,
     "random_seed": 42,
@@ -59,10 +55,9 @@
     "max_chips_per_scene": 10,
     "nan_tolerance": 0.2
   },
-  
+
   "stage5_training": {
-    "input_dir": "outputs/20260307",
-    "output_dir": "outputs/20260307/models",
+    "_paths_from": "manifest.stages.stage4.output → input_dir, manifest.stages.stage5.output → output_dir",
     "model_type": "unsupervised",
     "goal": "geographical",
     "architecture": "vit-mae",
@@ -75,13 +70,11 @@
     },
     "random_seed": 42,
     "checkpoint_every_n_epochs": 5,
-    "parameter_selection": "model/parameterSelection-UnSupervised-Geographical.json"
+    "parameter_selection": "configs/model-params/parameterSelection-UnSupervised-Geographical.json"
   },
-  
+
   "stage6_feedback": {
-    "model_report": "outputs/20260307/models/training_report.json",
-    "validation_metrics": "outputs/20260307/validation_metrics.json",
-    "output_dir": "outputs/20260307",
+    "_paths_from": "manifest.stages.stage5.output (model_report, validation_metrics), manifest.stages.stage6.output (output_dir)",
     "current_configs_dir": "configs",
     "recommendation_threshold": 0.7,
     "rejection_rate_threshold": 0.8

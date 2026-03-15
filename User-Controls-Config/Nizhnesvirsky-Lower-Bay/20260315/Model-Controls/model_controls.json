@@ -1,0 +1,15 @@
+{
+  "_description": "Date-specific override for 2026-03-15. Any key here replaces the corresponding Default key.",
+  "_override_rule": "Date folder beats Default. Within a config, any key present overrides the corresponding Default key.",
+  "_inherits_from": "User-Controls-Config/Nizhnesvirsky-Lower-Bay/Default/Model-Controls/model_controls.json",
+  "_overrides": {
+    "_comment": "Add overrides below. E.g. to change epochs only for today's run:",
+    "_example": {
+      "geographical": {
+        "unsupervised": {
+          "epochs": 5
+        }
+      }
+    }
+  }
+}

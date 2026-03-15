@@ -1,0 +1,10 @@
+{
+  "_description": "Date-specific attribute override for 2026-03-15.",
+  "_override_rule": "force_include=true overrides any automated exclusion. force_exclude=true overrides any automated inclusion. Both flags being true is invalid \u2014 exclude wins.",
+  "_inherits_from": "User-Controls-Config/Nizhnesvirsky-Lower-Bay/Default/Attribute-Controls/attribute_controls.json",
+  "_overrides": {
+    "_comment": "Add force_include/force_exclude overrides below.",
+    "s1_attributes": {},
+    "s2_attributes": {}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "_description": "SentinelHub / CDSE connectivity configuration. The credentials file itself is gitignored — this file only records where to find it and which endpoint to use. Agents MUST load credentials via src.sentinel_queryutils_listings._load_sh_config, NOT by reading this file directly.",
+  "credentials_path": ".config/sentinelhub/config.toml",
+  "endpoint": "https://sh.dataspace.copernicus.eu",
+  "catalog_endpoint": "https://sh.dataspace.copernicus.eu/api/v1/catalog/1.0.0",
+  "token_url": "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token",
+  "notes": [
+    "CDSE catalog rejects item_ids= parameter — always use ids=[] or date+bbox search with prefix matching.",
+    "Strip _COG suffix from scene IDs before catalog lookup.",
+    "TLS handshake may hang on macOS/Python 3.9 if SentinelConfig is constructed inline — always use _load_sh_config."
+  ]
+}

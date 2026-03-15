@@ -1,0 +1,49 @@
+{
+  "_description": "Default model tuning parameters per goal, sub-goal and run type. A date-specific override in User-Controls-Config/<Region>/YYYYMMDD/Model-Controls/ takes full precedence. Parameters here feed stages 4 and 5 when no override exists.",
+  "_override_rule": "Date folder beats Default. Within a config, any key present overrides the corresponding Default key.",
+  "goals": {
+    "geographical": {
+      "unsupervised": {
+        "model_arch": "ViT-MAE",
+        "batch_size": 4,
+        "chip_size": 512,
+        "epochs": 10,
+        "learning_rate": 0.0001,
+        "patience": 3,
+        "optimizer": "AdamW",
+        "loss_function": "MSE",
+        "device": "mps",
+        "normalize": true,
+        "train_val_test_split": [0.7, 0.2, 0.1],
+        "max_chips_per_scene": 10,
+        "nan_tolerance": 0.2,
+        "random_seed": 42,
+        "checkpoint_every_n_epochs": 5
+      },
+      "supervised": {
+        "model_arch": "CNN",
+        "batch_size": 4,
+        "chip_size": 224,
+        "epochs": 20,
+        "learning_rate": 0.0001,
+        "patience": 5,
+        "optimizer": "AdamW",
+        "loss_function": "CrossEntropy",
+        "device": "mps",
+        "normalize": true,
+        "train_val_test_split": [0.7, 0.2, 0.1],
+        "max_chips_per_scene": 10,
+        "nan_tolerance": 0.2,
+        "random_seed": 42
+      }
+    },
+    "agricultural": {
+      "unsupervised": {},
+      "supervised": {}
+    },
+    "urban": {
+      "unsupervised": {},
+      "supervised": {}
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "_description": "S3 / CDSE eodata endpoint configuration. Used by src/save_images_data.py and model/s3_utils.py. Credentials are loaded from .config/aws/credentials (profile [cdse]) via src.credentials, with .s3cfg walk and AWS_* env vars as fallbacks (all gitignored).",
+  "credentials_path": ".config/aws/credentials",
+  "credentials_profile": "cdse",
+  "endpoint_url": "https://eodata.dataspace.copernicus.eu",
+  "uri_normalization": {
+    "s3://EODATA": "s3://eodata",
+    "s3://EOData": "s3://eodata",
+    "s3://Eodata": "s3://eodata"
+  },
+  "sentinel1_prefix": "s3://eodata/Sentinel-1/",
+  "sentinel2_prefix": "s3://eodata/Sentinel-2/",
+  "safe_directory_detection": "treat as directory if last path segment has no file extension OR STAC type is inode/directory",
+  "error_recovery": {
+    "on_404_headobject": "fallback to list_objects_v2 with key as prefix",
+    "on_empty_safe_dir": "delete and re-fetch — do NOT skip"
+  },
+  "primary_asset_resolution_order": ["data", "product", "download"],
+  "primary_asset_href_preference": "alternate.s3.href over href"
+}

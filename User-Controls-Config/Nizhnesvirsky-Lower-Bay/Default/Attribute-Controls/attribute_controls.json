@@ -1,0 +1,64 @@
+{
+  "_description": "Attribute-level override controls for ML feature selection. Each attribute may have force_include or force_exclude set to override automated pipeline decisions. 'reason' is required when a force flag is set. Source: 1 sample S1 and S2 scene catalog. These defaults apply when no date-specific override exists.",
+  "_override_rule": "force_include=true overrides any automated exclusion. force_exclude=true overrides any automated inclusion. Both flags being true is invalid — exclude wins.",
+  "_sample_refs": {
+    "s1_sample": "Data/Nizhnesvirsky-Lower-Bay/Static/S1/S1-samples/",
+    "s2_sample": "Data/Nizhnesvirsky-Lower-Bay/Static/S2/S2-samples/"
+  },
+  "s1_attributes": {
+    "orbit_direction": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "polarization_vv": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "polarization_vh": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "incidence_angle": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "cloud_cover": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "nodata_fraction": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    }
+  },
+  "s2_attributes": {
+    "band_B04_red": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "band_B03_green": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "band_B02_blue": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    },
+    "cloud_cover": {
+      "force_include": null,
+      "force_exclude": null,
+      "reason": null
+    }
+  },
+  "feature_suitability_min": "Medium",
+  "notes": "Set force_include/force_exclude to true/false with a reason string to override pipeline decisions."
+}

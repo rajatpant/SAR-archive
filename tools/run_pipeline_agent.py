@@ -9,7 +9,7 @@ Example:
 """
 import argparse
 import json
-from agents.orchestrator import PipelineOrchestrator
+from src.Agents.orchestrator import PipelineOrchestrator
 
 def main():
     """CLI entry point for pipeline orchestrator."""
