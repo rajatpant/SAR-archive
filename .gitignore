@@ -1,0 +1,24 @@
+# Local credentials and environment settings
+.config/
+.env
+.env.*
+!.env.example
+
+# Downloaded or generated SAR data
+Data/
+data/
+outputs/
+**/*.SAFE/
+*.tif
+*.tiff
+*.jp2
+
+# Local model artifacts, logs, and Python environments
+*.pt
+*.pth
+*.ckpt
+*.log
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
